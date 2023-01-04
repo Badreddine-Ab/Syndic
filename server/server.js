@@ -1,15 +1,15 @@
 require('dotenv').config()
 
 // const apiError = require('./Utils/apiError')
-// const globalError = require('./Middlewares/errorMiddleware')
+const globalError = require('./middlewares/errorMiddleware')
 const cors = require('cors');
-const router = require('./Routes/authRouter')
-const routerSyndic= require('./Routes/SyndicRouter')
+const router = require('./routes/auth')
+// const routerSyndic= require('./Routes/SyndicRouter')
 const cookieParser = require("cookie-parser");
 
 
 const express = require('express');
-// const apiError = require('./Utils/apiError');
+const apiError = require('./utils/apiError');
 const app = express()
 
 app.use(cookieParser());
@@ -17,7 +17,7 @@ app.use(cors({ origin:true, credentials:true }));
 app.use(express.json())
 const dbConnection = require("./Config/database")
 app.use('/api/auth',router)
-app.use('/api/syndic',routerManager)
+// app.use('/api/syndic',routerManager)
 
 
 
