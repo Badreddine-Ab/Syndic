@@ -1,12 +1,14 @@
 import React from 'react';
 import logo from '../assets/images/gestion-syndic-de-copropriete-à-Le-Mans-Sarthe-72.png'
 import { Link } from 'react-router-dom';
-import axios from 'axios'
+
+
+
 
 const LoginForm = () => {
 
 
-    
+
 
   return (
     <div className="bg-pink-900 flex items-center justify-center h-screen w-screen">
