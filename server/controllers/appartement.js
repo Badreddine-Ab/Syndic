@@ -1,62 +1,76 @@
-const Apartment = require('../models/appartement');
-const Payment = require('../models/payment');
+const Apartment = require("../models/appartement");
+const apiError = require('../utils/apiError')
 
-// Create a new apartment
-exports.createApartment = async (req, res) => {
+// Create an apartment
+exports.createApartment = async (req, res, next) => {
   try {
-    const apartment = new Apartment(req.body);
+    const apartment = new Apartment({
+      name: req.body.name,
+      address: req.body.address,
+      owner: req.body.owner,
+    });
     await apartment.save();
-    res.status(201).send(apartment);
+    res.status(201).json({ message: "Apartment created successfully" });
   } catch (error) {
-    res.status(400).send(error);
+    return next(new apiError(error));
   }
 };
 
 // Get all apartments
-exports.getApartments = async (req, res) => {
+exports.getApartments = async (req, res, next) => {
   try {
-    const apartments = await Apartment.find();
-    res.send(apartments);
+    const apartments = await Apartment.find().populate("paymentHistory");
+    res.status(200).json(apartments);
   } catch (error) {
-    res.status(500).send(error);
+    return next(new apiError(error));
   }
 };
 
-// Get an apartment by ID
-exports.getApartmentById = async (req, res) => {
+// Get a single apartment
+exports.getApartment = async (req, res, next) => {
   try {
-    const apartment = await Apartment.findById(req.params.id);
+    const apartment = await Apartment.findById(req.params.apartmentId).populate(
+      "paymentHistory"
+    );
     if (!apartment) {
-      return res.status(404).send();
+      return next( new apiError("Apartment not found",404));
     }
-    res.send(apartment);
+    res.status(200).json(apartment);
   } catch (error) {
-    res.status(500).send(error);
+    next(error);
   }
 };
 
 // Update an apartment
-exports.updateApartment = async (req, res) => {
+exports.updateApartment = async (req, res, next) => {
   try {
-    const apartment = await Apartment.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    const apartment = await Apartment.findByIdAndUpdate(
+      req.params.apartmentId,
+      {
+        name: req.body.name,
+        address: req.body.address,
+        owner: req.body.owner,
+      },
+      { new: true }
+    );
     if (!apartment) {
-      return res.status(404).send();
+     return next (new apiError("Apartment not found", 404));
     }
-    res.send(apartment);
+    res.status(200).json({ message: "Apartment updated successfully" });
   } catch (error) {
-    res.status(400).send(error);
+    next(error);
   }
 };
 
 // Delete an apartment
-exports.deleteApartment = async (req, res) => {
+exports.deleteApartment = async (req, res, next) => {
   try {
-    const apartment = await Apartment.findByIdAndDelete(req.params.id);
+    const apartment = await Apartment.findByIdAndDelete(req.params.apartmentId);
     if (!apartment) {
-      return res.status(404).send();
+      return next (new apiError("Apartment not found", 404));
     }
-    res.send(apartment);
+    res.status(200).json({ message: "Apartment deleted successfully" });
   } catch (error) {
-    res.status(500).send(error);
+    next(error);
   }
 };

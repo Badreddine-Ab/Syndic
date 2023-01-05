@@ -1,72 +1,88 @@
-const Apartment = require('../models/Apartment');
-const Payment = require('../models/Payment');
+const Payment = require("../models/payment");
+const Apartment = require("../models/appartement");
+const apiError = require('../utils/apiError')
 
-// Create a new payment for an apartment
-exports.createPayment = async (req, res) => {
+
+// Create a payment
+exports.createPayment = async (req, res, next) => {
   try {
-    const apartment = await Apartment.findById(req.params.id);
+    const { apartmentId } = req.params;
+    const apartment = await Apartment.findById(apartmentId);
+    console.log(apartmentId)
     if (!apartment) {
-      return res.status(404).send();
+      return next (new apiError("Apartment not found", 404));
     }
-    const payment = new Payment({ ...req.body, apartment: apartment._id });
+
+    const payment = new Payment({
+      ...req.body,
+      apartment: apartmentId,
+    });
+
     await payment.save();
     apartment.paymentHistory.push(payment._id);
     await apartment.save();
-    res.status(201).send(payment);
+
+    res.status(201).send({ payment });
   } catch (error) {
-    res.status(400).send(error);
+    next(error);
   }
 };
 
-// Get all payments for an apartment
-exports.getPayments = async (req, res) => {
+// Get all payments
+exports.getPayments = async (req, res, next) => {
   try {
-    const apartment = await Apartment.findById(req.params.id);
-    if (!apartment) {
-      return res.status(404).send();
-    }
-    const payments = await Payment.find({ apartment: apartment._id });
-    res.send(payments);
+    const payments = await Payment.find().populate("apartment");
+    res.send({ payments });
   } catch (error) {
-    res.status(500).send(error);
+    next(error);
   }
 };
 
-// Get a payment by ID
-exports.getPaymentById = async (req, res) => {
+// Get a single payment
+exports.getPayment = async (req, res, next) => {
   try {
-    const payment = await Payment.findById(req.params.paymentId);
+    const { paymentId } = req.params;
+    const payment = await Payment.findById(paymentId).populate("apartment");
     if (!payment) {
-      return res.status(404).send();
+      return next (new apiError("Payment not found", 404));
     }
-    res.send(payment);
+    res.send({ payment });
   } catch (error) {
-    res.status(500).send(error);
+    next(error);
   }
 };
 
 // Update a payment
-exports.updatePayment = async (req, res) => {
-  try {
-    const payment = await Payment.findByIdAndUpdate(req.params.paymentId, req.body, { new: true });
-    if (!payment) {
-      return res.status(404).send();
+exports.updatePayment = async (req, res, next) => {
+    try {
+      const { paymentId } = req.params;
+      const payment = await Payment.findById(paymentId);
+      if (!payment) {
+        return next(new apiError("Payment not found", 404));
+      }
+  
+      Object.assign(payment, req.body);
+      payment.paid = true;
+      await payment.save();
+  
+      res.send({ payment });
+    } catch (error) {
+      next(error);
     }
-    res.send(payment);
-  } catch (error) {
-    res.status(400).send(error);
-  }
-};
+  };
+  
 
 // Delete a payment
-exports.deletePayment = async (req, res) => {
+exports.deletePayment = async (req, res, next) => {
   try {
-    const payment = await Payment.findByIdAndDelete(req.params.paymentId);
+    const { paymentId } = req.params;
+    const payment = await Payment.findById(paymentId);
     if (!payment) {
-      return res.status(404).send();
+        return next(new apiError("Payment not found", 404));
     }
-    res.send(payment);
+    await payment.remove();
+    res.send({ message: "Payment deleted successfully" });
   } catch (error) {
-    res.status(500).send(error);
+    next(error);
   }
 };

@@ -20,9 +20,7 @@ const Login =  async (req,res,next) => {
     if(!ValidPassword){
       return next( new apiError('Invalid password',400))
     }
-   else if(ValidPassword && user && user.status == 'Pending'){
-    return next( new apiError("Pending Account. Please Verify Your Email!",401))
-   }else {
+  else {
    try {
     await bcrypt.compare(password,user.password)
 

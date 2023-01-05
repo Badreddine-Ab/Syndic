@@ -1,3 +1,5 @@
+const mongoose = require("mongoose")
+
 const paymentSchema = new mongoose.Schema({
     apartment: {
       type: mongoose.Schema.Types.ObjectId,
