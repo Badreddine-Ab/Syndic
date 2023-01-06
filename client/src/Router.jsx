@@ -1,36 +1,41 @@
-import React, { useContext } from 'react';
+// import React, {  Fragment } from 'react';
 import {
   BrowserRouter,
   Routes,
   Route,
-  Navigate
+  // Navigate
 } from "react-router-dom";
-import { AuthContext } from './context/authContext';
+
 import {AuthProvider} from './context/authProvider'
 import LoginForm from './pages/LoginForm';
 import Dashboard from './pages/Dashboard';
+// import { isAuthenticated } from './helper/authenticated';
+
+
+
+// const PrivateRoute = ({ children }) => {
+  
+//   return isAuthenticated() ? (
+//       <Fragment>
+//           {children}
+//       </Fragment>
+//   ) : <Navigate to="/" />
+// }
+
+// const PublicRoute = ({ children }) => {
+//   return isAuthenticated() ? <Navigate to="/dashboard" /> : children
+// }
 
 
 
 
-export const PrivateRoute = ({ children }) => {
-  const { isLoggedIn } = useContext(AuthContext);
-
-  if (!isLoggedIn) {
-    // not logged in so redirect to login page with the return url
-    return <Navigate to="/"  />
-}
-
-// authorized so return child components
-return children;
-};
 
 const Router = () => (
   <BrowserRouter>
     <AuthProvider>
       <Routes>
-        <Route path="/" exact element={<LoginForm />} />
-        <Route path="/dashboard" element={<PrivateRoute component={<Dashboard/>} />} />
+        <Route path="/" exact element={<LoginForm /> } />
+        <Route path="/dashboard" element={<Dashboard/>} />
       </Routes>
     </AuthProvider>
   </BrowserRouter>
