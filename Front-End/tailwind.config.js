@@ -5,10 +5,9 @@ module.exports = {
   ],
   theme: {
     extend: {
-      colors: {
-        green: '#00FF00',
-        purple: '#800080',
-      },
+      colors:{
+        gold: "#DCCE78"
+      }
     },
   },
   plugins: [],
