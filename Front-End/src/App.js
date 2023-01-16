@@ -37,8 +37,6 @@ const PublicRoute = ({ children }) => {
             <Route path='/register' element={ <PublicRoute> <Registration/> </PublicRoute>} />
             <Route path='/login' element={<PublicRoute> <Login/></PublicRoute>} />
             <Route path='/user' element={<PrivateRoute> <HelloUser/></PrivateRoute>} />
-            <Route path='/forgetPassword' element={<PublicRoute><ForgetPassword/></PublicRoute>} />
-            <Route path='/resetPassword/:token' element={<PublicRoute><ResetPassword/></PublicRoute> } />
             <Route path='*' element={<ErrorPage/>} />
           </Routes>
         </BrowserRouter>

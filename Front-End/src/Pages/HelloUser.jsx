@@ -6,6 +6,7 @@ export default function HelloUser(){
 
     return(
         <>
+
        <HeaderUser />
         <Profile/>
 
