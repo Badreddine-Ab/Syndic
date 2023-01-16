@@ -10,6 +10,7 @@ import { isAuthenticated } from './helper';
 import ForgetPassword from './Pages/ForgetPassword';
 
 import ResetPassword from './Pages/ResetPassword';
+import HelloPayments from './Pages/HelloPayments';
 
 
 function App() {
@@ -34,9 +35,10 @@ const PublicRoute = ({ children }) => {
         <BrowserRouter>
           <Routes>
             <Route path='/' element={<LandingPage/>} />
-            <Route path='/register' element={ <PublicRoute> <Registration/> </PublicRoute>} />
-            <Route path='/login' element={<PublicRoute> <Login/></PublicRoute>} />
-            <Route path='/user' element={<PrivateRoute> <HelloUser/></PrivateRoute>} />
+            <Route path='/register' element={ <PublicRoute><Registration/> </PublicRoute>} />
+            <Route path='/login' element={<PublicRoute><Login/></PublicRoute>} />
+            <Route path='/user' element={<PrivateRoute><HelloUser/></PrivateRoute>} />
+            <Route path='/payments' element={<PrivateRoute><HelloPayments/></PrivateRoute>} />
             <Route path='*' element={<ErrorPage/>} />
           </Routes>
         </BrowserRouter>
