@@ -1,15 +1,11 @@
-import HeaderUser from "../Components/User/HeaderUser"
-import Payments from "../Components/User/Payments"
+import HeaderUser from "../Components/User/HeaderUser";
+import Payment from "../Components/User/Payments";
 
-export default function HelloPayments(){
-  
-
-    return(
-        <>
-
-       <HeaderUser />
-        <Payments/>
-
-        </>
-    )
+export default function HelloPayments() {
+  return (
+    <>
+      <HeaderUser />
+      <Payment/>
+    </>
+  );
 }
