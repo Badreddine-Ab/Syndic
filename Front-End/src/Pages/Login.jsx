@@ -33,8 +33,6 @@ export default function Login() {
         try {
             const res = await axios.post("http://localhost:8080/api/auth/login", form, {withCredentials: true});
             //login success
-   
-           
             navigate('/user')
             setError('')
             setResponse(res.data)
@@ -55,7 +53,6 @@ export default function Login() {
         <section className="bg-gray-50 dark:bg-gray-900">
         <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
             <Header/>
-            
             <Form  response={response} Title="Login" to='/register' error={error} navigate="You don't have an account ?" redirect="Signup here" state={form} setState={setForm} HandleSubmit={HandleSubmit}>
                 <Input handleChange={handleChange} name='email' state={form.email} setState={setForm} label="Your Email" placeHolder="badr@youcode.com" input="email"/>
                 <Input handleChange={handleChange} name ="password" state={form.password} setState={setForm} label="Your Password" placeHolder="password" input="password"/>
